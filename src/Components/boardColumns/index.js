@@ -1,11 +1,12 @@
 import Grid from "@material-ui/core/Grid";
 import BoardItems from "../boardItems";
-import React from "react";
+import React, {useState} from "react";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
+import AddingItem from "../boardItems/addItems";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,16 +16,34 @@ const useStyles = makeStyles((theme) => ({
     paper: {
             padding: "4px",
             paddingLeft: "20px",
-            backgroundColor: "#cccccc"
+            backgroundColor: "#fff"
     },
+    button:{
+        backgroundColor: "#cccccc",
+    }
 }));
 
-function BoardColumns({name, tasks, color})
+function BoardColumns({name, tasks, color, onAddingNewItem})
 {
+    const [isHiddenAddingNewItems, setIsHiddenAddingNewItems] = useState(true);
+
     const classes = useStyles();
 
+    const handleNewItem = () => {
+        if(isHiddenAddingNewItems)
+            setIsHiddenAddingNewItems(false);
+    }
+    const handleCloseNewItem = () =>{
+        if(!isHiddenAddingNewItems)
+            setIsHiddenAddingNewItems(true);
+    }
+
+
+    const newItem = isHiddenAddingNewItems ? <React.Fragment/> :
+        <AddingItem onclickClose= {handleCloseNewItem} onClickAdd = {onAddingNewItem} name = {name}/>;
+
     return(
-        <Grid container xs = {12} sm={4} item direction={"column"}>
+        <Grid item container xs = {12} sm={4} direction={"column"}>
             <Grid container spacing={1} >
                 <Grid item xs ={12}>
                     <Paper elevation={3} className={classes.paper}>
@@ -35,14 +54,14 @@ function BoardColumns({name, tasks, color})
                                 </Box>
                             </Grid>
                             <Grid item>
-                                <IconButton size={"small"}>
+                                <IconButton size={"small"} onClick={() => handleNewItem()}>
                                     <AddIcon/>
                                 </IconButton>
                             </Grid>
                         </Grid>
                     </Paper>
-
                 </Grid>
+                {newItem}
                 <BoardItems tasks = {tasks} color = {color}/>
             </Grid>
         </Grid>

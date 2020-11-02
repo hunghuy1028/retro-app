@@ -10,10 +10,11 @@ import Paper from "@material-ui/core/Paper";
 const useStyles = makeStyles((theme) => ({
     paper:{
         padding: "7px",
-        paddingLeft: "20px"
+        paddingLeft: "10px"
     },
     icon: {
-            color: "#ffffff"
+        color: "#ffffff",
+        fontSize: "16px"
     }
 }));
 
@@ -28,22 +29,22 @@ function boardItems({tasks, color}) {
                 tasks.map(task =>
                 {
                     return(
-                        <Grid item xs={12} key = {task.id} spacing={2}>
+                        <Grid item xs={12} key = {task.id}>
                             <Paper style={{backgroundColor: color}} className={classes.paper}>
                                 <Grid container justify="space-between"
                                       alignItems="center">
-                                    <Grid item>
+                                    <Grid item xs>
                                         <Box fontWeight="fontWeightMedium"
-                                             color={"white"}>
-                                            {task.content}
+                                             color={"white"} >
+                                                {task.content}
                                         </Box>
                                     </Grid>
-                                    <Grid item>
+                                    <Grid container item justify="flex-end" alignItems={"flex-end"}>
                                         <IconButton size={"small"}>
-                                            <EditIcon className={classes.icon}/>
+                                            <EditIcon fontSize={"inherit"} className={classes.icon}/>
                                         </IconButton>
                                         <IconButton size={"small"}>
-                                            <DeleteIcon className={classes.icon}/>
+                                            <DeleteIcon fontSize={"inherit"} className={classes.icon}/>
                                         </IconButton>
                                     </Grid>
                                 </Grid>
