@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import callAPI from "../../util/callAPI";
 
 export default function NewBoard({open, handleAddBoard, handleClose}) {
 
@@ -13,8 +14,13 @@ export default function NewBoard({open, handleAddBoard, handleClose}) {
 
     const addingNewBoard = () =>
     {
-        handleAddBoard(contentTextField);
-        handleClose();
+        if(contentTextField.length > 0)
+        {
+            callAPI("POST", "newBoard", {contentTextField}).then(res => {
+                handleAddBoard(contentTextField, res.data);
+                handleClose();
+            })
+        }
     }
 
     return (

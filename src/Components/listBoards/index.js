@@ -16,10 +16,13 @@ const useStyles = makeStyles((theme) => ({
         padding: "20px",
     },
     card:{
-        maxWidth: "150px",
+        maxWidth: "150px"
     },
     icon:{
         fontSize: "50px",
+    },
+    cardItem:{
+        height: "100px"
     }
 
 }));
@@ -28,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
 function ListBoard()
 {
     const [isNewBoardOpen, setIsNewBoardOpen] = useState(false);
-    const [listBoards, setListBoards] = useState([]);
+    const [listBoards, setListBoards] = useState([{
+        _id: null, nameBoard: "",
+    }]);
     const classes = useStyles();
 
     useEffect(() => {
@@ -48,16 +53,16 @@ function ListBoard()
             setIsNewBoardOpen(false)
     }
 
-    const handleAdding = (nameBoard) =>
+    const handleAddBoard = (nameBoard, link) =>
     {
-        const newObj = [{nameBoard: nameBoard}]
+        const newObj = [{_id: link, nameBoard: nameBoard}]
         setListBoards(listBoards.concat(newObj));
     }
 
 
     return(
         <div className={classes.root}>
-            <Card className={classes.card} onClick={createNewBoard} >
+            <Card className={classes.card} onClick={createNewBoard} elevation={4} >
                 <CardActionArea>
                     <CardContent>
                         <Grid container alignItems={"center"} justify={"center"}>
@@ -69,17 +74,17 @@ function ListBoard()
                     </CardContent>
                 </CardActionArea>
             </Card>
-            <NewBoard open = {isNewBoardOpen} handleAddBoard = {handleAdding} handleClose = {handleClose}/>
-            <Grid container spacing={2}>
+            <NewBoard open = {isNewBoardOpen} handleAddBoard = {handleAddBoard} handleClose = {handleClose}/>
+            <Grid container spacing={2} style={{marginTop: "20px"}}>
             {
                 listBoards.map((item, index) => {
                     const navigateLink = "/board?id=" + item._id;
                     return(
                         <Grid item xs={4} sm={2} key = {index}>
                             <Link to = {navigateLink}>
-                                <Card>
+                                <Card elevation={4}>
                                     <CardActionArea>
-                                        <CardContent>
+                                        <CardContent className={classes.cardItem}>
                                             <Grid container alignItems={"center"} justify={"center"}>
                                                 <Typography>
                                                     {item.nameBoard}

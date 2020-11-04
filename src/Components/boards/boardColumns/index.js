@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function BoardColumns({name, tasks, color, onAddingNewItem})
+function BoardColumns({tasks, color, onAddingNewItem, onRemoveItem})
 {
     const [isHiddenAddingNewItems, setIsHiddenAddingNewItems] = useState(true);
 
@@ -40,7 +40,7 @@ function BoardColumns({name, tasks, color, onAddingNewItem})
 
 
     const newItem = isHiddenAddingNewItems ? <React.Fragment/> :
-        <AddingItem onclickClose= {handleCloseNewItem} onClickAdd = {onAddingNewItem} name = {name}/>;
+        <AddingItem onclickClose= {handleCloseNewItem} onClickAdd = {onAddingNewItem} task = {tasks}/>;
 
     return(
         <Grid item container xs = {12} sm={4} direction={"column"}>
@@ -50,7 +50,7 @@ function BoardColumns({name, tasks, color, onAddingNewItem})
                         <Grid container justify="space-between" alignItems="center">
                             <Grid item>
                                 <Box fontWeight="fontWeightBold">
-                                    {name}
+                                    {tasks.name}
                                 </Box>
                             </Grid>
                             <Grid item>
@@ -62,7 +62,7 @@ function BoardColumns({name, tasks, color, onAddingNewItem})
                     </Paper>
                 </Grid>
                 {newItem}
-                <BoardItems tasks = {tasks} color = {color}/>
+                <BoardItems onRemoveItem = {onRemoveItem} tasks = {tasks} color = {color}/>
             </Grid>
         </Grid>
     )

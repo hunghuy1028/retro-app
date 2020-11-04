@@ -4,16 +4,29 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import {FormControl} from "@material-ui/core";
+import callAPI from "../../../util/callAPI";
 
-function AddingItem({onclickClose, onClickAdd, name})
+function AddingItem({onclickClose, onClickAdd, task})
 {
 
     const [textContent, setTextContent] = useState("");
 
     const addingNewItem = () =>
     {
-        onClickAdd(name, textContent);
-        onclickClose();
+        if(textContent !== "")
+        {
+            onClickAdd(task.name, textContent);
+            onclickClose();
+            callAPI("POST", "newTaskInBoard", {
+                id: task.id,
+                name: task.name,
+                content: textContent,
+            }).then(res => onclickClose)
+        }
+        else
+        {
+            onclickClose();
+        }
     }
 
     return(
