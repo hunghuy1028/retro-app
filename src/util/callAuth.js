@@ -1,15 +1,14 @@
 import axios from "axios"
-const URL = "http://localhost:3000/";
+const URL = "http://localhost:3000/auth/";
 
-const callAPI = (method, pathUrl, body) => {
+const callAuth = () => {
     const token = JSON.parse(localStorage.getItem('user'));
     return axios({
-        method: method,
-        url: URL + pathUrl,
-        data: body,
+        method: "GET",
+        url: URL,
         headers: {"Authorization" : `Bearer ${token? token.accessToken: "null"}`}
     });
 
 }
 
-export default callAPI;
+export default callAuth;

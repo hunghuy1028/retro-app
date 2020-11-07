@@ -12,14 +12,16 @@ export default function NewBoard({open, handleAddBoard, handleClose}) {
 
     const [contentTextField, setContentTextField] = useState("");
 
-    const addingNewBoard = () =>
+    const addingNewBoard = async () =>
     {
         if(contentTextField.length > 0)
         {
-            callAPI("POST", "newBoard", {contentTextField}).then(res => {
-                handleAddBoard(contentTextField, res.data);
-                handleClose();
-            })
+            const res = await callAPI("POST", "users/newBoard", {contentTextField});
+            handleAddBoard(contentTextField, res.data);
+            handleClose();
+        }
+        else {
+            handleClose();
         }
     }
 

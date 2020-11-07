@@ -11,17 +11,17 @@ function AddingItem({onclickClose, onClickAdd, task})
 
     const [textContent, setTextContent] = useState("");
 
-    const addingNewItem = () =>
+    const addingNewItem = async () =>
     {
         if(textContent !== "")
         {
             onClickAdd(task.name, textContent);
             onclickClose();
-            callAPI("POST", "newTaskInBoard", {
+            await callAPI("POST", "boards/newTask", {
                 id: task.id,
                 name: task.name,
                 content: textContent,
-            }).then(res => onclickClose)
+            });
         }
         else
         {

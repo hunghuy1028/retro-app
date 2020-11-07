@@ -34,7 +34,7 @@ export default function MyAppBar() {
                     </IconButton>
 
                         <Typography variant="h5" className={classes.title}>
-                            <Link to="/user" style={{ textDecoration: 'none', color: "inherit" }}>
+                            <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
                             Retro
                             </Link>
                         </Typography>

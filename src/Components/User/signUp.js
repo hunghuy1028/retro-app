@@ -1,38 +1,23 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Collapse from "@material-ui/core/Collapse";
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+import {checkLoginService, signUpService} from "./service/authService";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(1),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -43,11 +28,17 @@ const useStyles = makeStyles((theme) => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(2),
     },
     submit: {
-        margin: theme.spacing(3, 0, 2),
+        margin: theme.spacing(1, 0, 2),
     },
+    input: {
+        fontSize: "15px"
+    },
+    labelInput:{
+        fontSize: "15px"
+    }
 }));
 
 export default function SignUp() {
@@ -55,29 +46,60 @@ export default function SignUp() {
         firstName: "",
         lastName: "",
         email: "",
+        username: "",
         password: "",
         rePassword: "",
-        alert: ""
         }
     )
+    const [status, setStatus] = useState({type: "error", content: ""});
     const [alert, setAlert] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+
+    useEffect(()=>{
+        const fetchAuthen = async () => {
+            const res = await checkLoginService();
+            if(res) setIsLogin(true);
+        }
+        fetchAuthen();
+    },[])
+
 
     const classes = useStyles();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if(infor.email.length === 0 || infor.lastName.length === 0 || infor.firstName.length === 0 ||
             infor.password.length === 0 || infor.rePassword.length === 0)
         {
-            setInfor({...infor, alert: "Please fill all field."});
+            setStatus({type: "error", content: "Please fill all fields"})
             setAlert(true);
         }else if(infor.password !== infor.rePassword)
         {
-            console.log(infor.rePassword, infor.password)
-            setInfor({...infor, alert: "Password not match."});
+            setStatus({type: "error", content: "Password not match"})
             setAlert(true);
         }
+        else if(infor.password.length < 6)
+        {
+            setStatus({type: "error", content: "Password at least 6 characters"})
+            setAlert(true);
+        }
+        else {
+            const res = await signUpService((infor.firstName+infor.lastName),
+                infor.username, infor.password, infor.email)
+            if(res.data.err)
+            {
+                setStatus({type: "error", content: res.data.err});
+                setAlert(true);
+            }else if (res.data.msg)
+            {
+                setStatus({type: "success", content: res.data.msg});
+                setAlert(true);
+                //direct
+            }
+        }
     }
+
+    if(isLogin) return(<Redirect to ="/users"/>)
 
     return (
         <Container component="main" maxWidth="xs">
@@ -90,7 +112,7 @@ export default function SignUp() {
                     Sign up
                 </Typography>
                 <Collapse in={alert}>
-                    <Alert severity={"error"}
+                    <Alert severity={status.type}
                            action={
                                <IconButton
                                    aria-label="close"
@@ -104,7 +126,7 @@ export default function SignUp() {
                                </IconButton>
                            }
                     >
-                        {infor.alert}
+                        {status.content}
                     </Alert>
                 </Collapse>
                 <form className={classes.form} noValidate>
@@ -119,6 +141,12 @@ export default function SignUp() {
                                 id="firstName"
                                 label="First Name"
                                 autoFocus
+                                InputProps={{
+                                    className: classes.input
+                                }}
+                                InputLabelProps={{
+                                    className: classes.labelInput
+                                }}
                                 onChange = {(e) => setInfor({...infor, firstName: e.target.value})}
                             />
                         </Grid>
@@ -131,7 +159,30 @@ export default function SignUp() {
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="lname"
+                                InputProps={{
+                                    className: classes.input
+                                }}
+                                InputLabelProps={{
+                                    className: classes.labelInput
+                                }}
                                 onChange = {(e) => setInfor({...infor, lastName: e.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="username"
+                                label="Username"
+                                name="username"
+                                InputProps={{
+                                    className: classes.input
+                                }}
+                                InputLabelProps={{
+                                    className: classes.labelInput
+                                }}
+                                onChange = {(e) => setInfor({...infor, username: e.target.value})}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -143,6 +194,12 @@ export default function SignUp() {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                InputProps={{
+                                    className: classes.input
+                                }}
+                                InputLabelProps={{
+                                    className: classes.labelInput
+                                }}
                                 onChange = {(e) => setInfor({...infor, email: e.target.value})}
                             />
                         </Grid>
@@ -156,6 +213,12 @@ export default function SignUp() {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                InputProps={{
+                                    className: classes.input
+                                }}
+                                InputLabelProps={{
+                                    className: classes.labelInput
+                                }}
                                 onChange = {(e) => setInfor({...infor, password: e.target.value})}
                             />
                         </Grid>
@@ -168,15 +231,15 @@ export default function SignUp() {
                                 label="Re-Password"
                                 type="password"
                                 id="re-password"
+                                InputProps={{
+                                    className: classes.input
+                                }}
+                                InputLabelProps={{
+                                    className: classes.labelInput
+                                }}
                                 onChange = {(e) => setInfor({...infor, rePassword: e.target.value})}
                             />
                         </Grid>
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <FormControlLabel*/}
-                        {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
-                        {/*        label="I want to receive inspiration, marketing promotions and updates via email."*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
                     </Grid>
                     <Button
                         type="submit"
@@ -197,9 +260,6 @@ export default function SignUp() {
                     </Grid>
                 </form>
             </div>
-            {/*<Box mt={5}>*/}
-            {/*    <Copyright />*/}
-            {/*</Box>*/}
         </Container>
     );
 }

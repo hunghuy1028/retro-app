@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,24 +9,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Link} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
-import AuthService from "../service/authService";
-
-// function Copyright() {
-//     return (
-//         <Typography variant="body2" color="textSecondary" align="center">
-//             {'Copyright © '}
-//             <Link color="inherit" href="https://material-ui.com/">
-//                 Your Website
-//             </Link>{' '}
-//             {new Date().getFullYear()}
-//             {'.'}
-//         </Typography>
-//     );
-// }
+import {checkLoginService, loginService} from "./service/authService";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -56,10 +43,20 @@ export default function SignIn() {
     });
     const [error, setError] = useState("");
     const [alert, setAlert] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+
+    useEffect(()=>{
+        const fetchAuthen = async () => {
+            const res = await checkLoginService();
+            if(res) setIsLogin(true);
+        }
+        fetchAuthen();
+    },[])
+
 
     const classes = useStyles();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if(input.user.length === 0 || input.password.length === 0)
         {
@@ -67,19 +64,22 @@ export default function SignIn() {
             setAlert(true);
         }
         else {
-            AuthService.loginService(input.user, input.password).then((res)=> {
-                if(res.msg)
-                {
-                    setError(res.msg)
-                    setAlert(true);
-                }
-                else
-                {
-
-                }
-            })
+            const res = await loginService(input.user, input.password);
+            console.log(res);
+            if(res.msg)
+            {
+                setError(res.msg)
+                setAlert(true);
+            }
+            else
+            {
+                //direct
+                setIsLogin(true);
+            }
         }
     }
+
+    if(isLogin) return(<Redirect to ="/users"/>);
 
     return (
         <Container component="main" maxWidth="xs">
