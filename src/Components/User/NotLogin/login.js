@@ -13,7 +13,7 @@ import {Redirect, Link} from "react-router-dom";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
-import {checkLoginService, loginService} from "./service/authService";
+import {checkLoginService, getCurrentUser, loginService} from "../service/authService";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -35,40 +35,54 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn() {
+export default function SignIn({location}) {
     const [input, setInput] = useState({
         user: "",
         password: "",
         error: "",
     });
-    const [error, setError] = useState("");
+    const [status, setStatus] = useState({type: "error", content:""});
     const [alert, setAlert] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const classes = useStyles();
 
     useEffect(()=>{
         const fetchAuthen = async () => {
-            const res = await checkLoginService();
-            if(res) setIsLogin(true);
+            if(getCurrentUser())
+            {
+                const res = await checkLoginService();
+                if(res) setIsLogin(true);
+            }
+            else {
+                setIsLogin(false);
+            }
         }
         fetchAuthen();
-    },[])
-
-
-    const classes = useStyles();
+        if(location.location.err)
+        {
+            setStatus({type:"error", content: location.location.err})
+            setAlert(true);
+        }
+        else if (location.location.success)
+        {
+            setStatus({type:"success", content: location.location.success})
+            setAlert(true);
+        }
+    },[location.location])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(input.user.length === 0 || input.password.length === 0)
         {
-            setError("Please enter username or password")
+            setStatus({type: "error", content: "Please enter username or password"})
             setAlert(true);
         }
         else {
             const res = await loginService(input.user, input.password);
-            console.log(res);
+
             if(res.msg)
             {
-                setError(res.msg)
+                setStatus({type: "error", content: res.msg})
                 setAlert(true);
             }
             else
@@ -79,7 +93,7 @@ export default function SignIn() {
         }
     }
 
-    if(isLogin) return(<Redirect to ="/users"/>);
+    if(isLogin) return(<Redirect to ="/dashboard"/>);
 
     return (
         <Container component="main" maxWidth="xs">
@@ -92,7 +106,7 @@ export default function SignIn() {
                     Sign in
                 </Typography>
                 <Collapse in={alert}>
-                    <Alert severity={"error"}
+                    <Alert severity={status.type}
                         action={
                             <IconButton
                                 aria-label="close"
@@ -106,7 +120,7 @@ export default function SignIn() {
                             </IconButton>
                         }
                     >
-                        {error}
+                        {status.content}
                     </Alert>
                 </Collapse>
                 <form className={classes.form} noValidate>
@@ -136,10 +150,6 @@ export default function SignIn() {
                         onChange={(e)=>
                             setInput({...input, password: e.target.value})}
                     />
-                    {/*<FormControlLabel*/}
-                    {/*    control={<Checkbox value="remember" color="primary" />}*/}
-                    {/*    label="Remember me"*/}
-                    {/*/>*/}
                     <Button
                         type="submit"
                         fullWidth
@@ -164,9 +174,6 @@ export default function SignIn() {
                     </Grid>
                 </form>
             </div>
-            {/*<Box mt={8}>*/}
-            {/*    <Copyright />*/}
-            {/*</Box>*/}
         </Container>
     );
 }

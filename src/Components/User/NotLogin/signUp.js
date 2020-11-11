@@ -13,7 +13,7 @@ import Alert from "@material-ui/lab/Alert";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Collapse from "@material-ui/core/Collapse";
-import {checkLoginService, signUpService} from "./service/authService";
+import {checkLoginService, signUpService} from "../service/authService";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -54,6 +54,7 @@ export default function SignUp() {
     const [status, setStatus] = useState({type: "error", content: ""});
     const [alert, setAlert] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
 
     useEffect(()=>{
         const fetchAuthen = async () => {
@@ -84,22 +85,23 @@ export default function SignUp() {
             setAlert(true);
         }
         else {
-            const res = await signUpService((infor.firstName+infor.lastName),
-                infor.username, infor.password, infor.email)
+            const res = await signUpService(infor.username, infor.firstName,infor.lastName, infor.password, infor.email)
             if(res.data.err)
             {
                 setStatus({type: "error", content: res.data.err});
                 setAlert(true);
             }else if (res.data.msg)
             {
-                setStatus({type: "success", content: res.data.msg});
-                setAlert(true);
+                // setStatus({type: "success", content: res.data.msg});
+                // setAlert(true);
                 //direct
+                setIsSignUpSuccess(true);
             }
         }
     }
 
-    if(isLogin) return(<Redirect to ="/users"/>)
+    if(isLogin) return(<Redirect to ="/dashboard"/>)
+    if(isSignUpSuccess) return (<Redirect to={{pathname: "/login", success: "Register success. You can login now!"}}/>)
 
     return (
         <Container component="main" maxWidth="xs">

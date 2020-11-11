@@ -5,6 +5,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import BoardColumns from "../boardColumns";
 import NameBoard from "./nameBoard";
 import callAPI from "../../../util/callAPI";
+import MyAppBar from "../../App/header";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -14,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
     nameBoard: {
         marginTop: "20px",
         marginBottom: "20px"
+    },
+    grid: {
+        backgroundColor: "#f3f3f3"
     }
 }));
 
@@ -72,18 +76,28 @@ function Board({match})
 
     const onRemoveItem = (nameColumn, index) => {
         if(nameColumn === "Went Well")
-        {
             setBoard({...board, wentWell: (wentWell.task.filter((_,i) => i !== index))})
+        else if (nameColumn === "To Improve")
+            setBoard({...board, toImprove: (toImprove.task.filter((_,i) => i !== index))})
+        else if (nameColumn === "Action Items")
+            setBoard({...board, actionItems: (actionItems.task.filter((_,i) => i !== index))})
+    }
+
+
+    const onEditItem = (nameColumn, index, newValue) =>
+    {
+        if(nameColumn === "Went Well")
+        {
+            setBoard({...board, wentWell: (wentWell.task.map((value, i) => i !== index? value : newValue))})
         }
         else if (nameColumn === "To Improve")
         {
-            setBoard({...board, toImprove: (toImprove.task.filter((_,i) => i !== index))})
+            setBoard({...board, toImprove: (toImprove.task.map((value, i) => i !== index? value : newValue))})
         }
         else if (nameColumn === "Action Items")
         {
-            setBoard({...board, actionItems: (actionItems.task.filter((_,i) => i !== index))})
+            setBoard({...board, actionItems: (actionItems.task.map((value, i) => i !== index? value : newValue))})
         }
-
     }
 
     const handleRenameBoard = async (newName) =>
@@ -91,40 +105,45 @@ function Board({match})
         setBoard({...board, nameBoard: newName});
     }
 
-
-
-    // if (error) {
-    //     return <div>Error: {error.message}</div>;
     if (!isLoaded) {
         return (
-            <div className="sweet-loading">
-                <ClipLoader
-                    override = {override}
-                    size={50}
-                    loading={!isLoaded}
-                />
-            </div>
+            <React.Fragment>
+                <MyAppBar/>
+                <div className="sweet-loading">
+                    <ClipLoader
+                        override = {override}
+                        size={50}
+                        loading={!isLoaded}
+                    />
+                </div>
+            </React.Fragment>
         )
     } else {
-
         return (
-            <div className={classes.root}>
-                {/*<h1>{items.nameBoard}</h1>*/}
+            <React.Fragment>
+                <MyAppBar/>
+                <div className={classes.root}>
                 <NameBoard nameBoard={board.nameBoard}
                            id={board._id}
                            handleRenameBoard={handleRenameBoard}/>
-                <Grid container spacing={2}>
-                    <BoardColumns tasks={wentWell} color="#009688"
-                                  onAddingNewItem={onAddingNewItem} onRemoveItem = {onRemoveItem}/>
-                    <BoardColumns tasks={toImprove} color="#e91e63"
-                                  onAddingNewItem={onAddingNewItem} onRemoveItem = {onRemoveItem}/>
-                    <BoardColumns tasks={actionItems} color="#9c27b0"
-                                  onAddingNewItem={onAddingNewItem} onRemoveItem = {onRemoveItem}/>
-                </Grid>
-            </div>
+                   <Grid container spacing={2} >
+                       <BoardColumns tasks={wentWell} color="#009688"
+                                     onAddingNewItem={onAddingNewItem}
+                                     onRemoveItem = {onRemoveItem}
+                                     onEditItem = {onEditItem}/>
+                       <BoardColumns tasks={toImprove} color="#e91e63"
+                                     onAddingNewItem={onAddingNewItem}
+                                     onRemoveItem = {onRemoveItem}
+                                     onEditItem = {onEditItem}/>
+                       <BoardColumns tasks={actionItems} color="#9c27b0"
+                                     onAddingNewItem={onAddingNewItem}
+                                     onRemoveItem = {onRemoveItem}
+                                     onEditItem = {onEditItem}/>
+                   </Grid>
+                </div>
+            </React.Fragment>
         );
     }
-
 }
 
 export default Board;

@@ -2,7 +2,8 @@ import callAPI from "../../util/callAPI";
 
 export const deleteBoardService = async (id) =>
 {
-    const res = await callAPI("POST", "users/deleteBoard", {
+    const pathURL = "users/deleteBoard"
+    const res = await callAPI("POST", pathURL, {
         id: id
     })
 

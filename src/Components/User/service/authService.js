@@ -8,9 +8,9 @@ export async function loginService(username, password){
             username: username,
             password: password
         })
-        console.log(res);
         if (res.data.accessToken) {
             localStorage.setItem("user", JSON.stringify(res.data));
+            console.log("Yes")
         }
         return res.data;
     }catch (e) {
@@ -19,12 +19,12 @@ export async function loginService(username, password){
 
 }
 
-
-export const signUpService = (fullName, username, password, email) =>
+export const signUpService = (username, firstName, lastName, password, email) =>
 {
     return callAPI("POST", "auth/signup", {
         username: username,
-        fullName: fullName,
+        firstName: firstName,
+        lastName: lastName,
         password: password,
         email: email,
     })

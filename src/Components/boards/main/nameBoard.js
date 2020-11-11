@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {saveNameBoard} from "./boardService";
+import InputBase from "@material-ui/core/InputBase";
 
 const useStyles = makeStyles((theme) => ({
     nameBoard: {
@@ -14,9 +15,10 @@ const useStyles = makeStyles((theme) => ({
     },
     typography: {
         paddingRight: "30px",
+        fontSize: "24px"
     },
     icon: {
-        marginBottom: "15px"
+        marginBottom: "10px"
     },
     buttonSave: {
         backgroundColor: "#00c853",
@@ -29,10 +31,11 @@ const useStyles = makeStyles((theme) => ({
     buttonClose: {
         color: "#2196f3"
     },
-    textField: {
-        marginLeft: 'auto',
-        fontWeight: 500
-    },
+    textField:{
+        marginBottom: 10,
+        marginRight: 10,
+        width: "50%"
+    }
 
 
 }));
@@ -56,7 +59,6 @@ export default function NameBoard({nameBoard, id, handleRenameBoard})
         }
         else {
             const res = await saveNameBoard(id, value);
-            console.log(res);
             if(res) handleRenameBoard(value);
         }
         setIsEditingNameBoard(false);
@@ -64,10 +66,7 @@ export default function NameBoard({nameBoard, id, handleRenameBoard})
 
     const handleClose = () =>
     {
-        if(value.length === 0)
-        {
-            setValue(nameBoard);
-        }
+        setValue(nameBoard);
         setIsEditingNameBoard(false);
     }
 
@@ -75,13 +74,18 @@ export default function NameBoard({nameBoard, id, handleRenameBoard})
         if (isEditingNameBoard)
         {
             return (
-                <React.Fragment>
+                <div style={{marginBottom: 10}}>
                     <TextField
                         defaultValue={nameBoard}
                         required
-                        variant="outlined"
+                        variant="standard"
                         onChange={(e) => setValue(e.target.value)}
                         className={classes.textField}
+                        inputProps={{
+                            style:{
+                                fontSize: "20px"
+                            }
+                        }}
                     />
                     <Button className={classes.buttonSave}
                             onClick={handleSave}>
@@ -91,17 +95,17 @@ export default function NameBoard({nameBoard, id, handleRenameBoard})
                             onClick={handleClose}>
                         Cancel
                     </Button>
-                </React.Fragment>
+                </div>
             )
         }
         else {
             return (
                 <Box className={classes.nameBoard}>
-                    <Typography variant="h4" display="inline" className={classes.typography}>
+                    <Typography variant="h5" display="inline" className={classes.typography}>
                         {value}
                     </Typography>
                     <IconButton size={"small"}  className={classes.icon} onClick={handleClick}>
-                        <EditIcon fontSize={"inherit"} style={{fontSize: "18px"}}/>
+                        <EditIcon fontSize={"inherit"} style={{fontSize: "15px"}}/>
                     </IconButton>
                 </Box>
             )
