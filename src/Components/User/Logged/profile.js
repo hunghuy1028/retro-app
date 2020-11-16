@@ -41,10 +41,15 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
     },
     button: {
-            marginTop: theme.spacing(3),
-            marginLeft: theme.spacing(1),
+        marginTop: theme.spacing(3),
+        marginLeft: theme.spacing(1),
+        backgroundColor: "#2CB895",
+        color: "#fff",
+        "&:hover": {
+            backgroundColor: "#239478",
+            color: "#ffffff",
         }
-
+    }
 }));
 
 
@@ -184,15 +189,21 @@ export default function Profile()
                                 />
                             </Grid>
                             <Grid container item justify={"space-between"} alignContent={"flex-end"}>
-                                <Link to="/users/changePassword" style={{ textDecoration: 'none', color: "inherit" }}>
-                                    <Button className={classes.button} size="large" variant="contained" color="primary">
-                                        Change password
+                                <Grid item>
+                                {loginState.user.isLocalLogin ?
+                                    (<Link to="/users/changePassword" style={{ textDecoration: 'none', color: "inherit" }}>
+                                        <Button className={classes.button} size="large" variant="contained">
+                                            Change password
+                                        </Button>
+                                    </Link>)
+                                    : <></>}
+                                </Grid>
+                                <Grid item>
+                                    <Button className={classes.button} size="large" variant="contained"
+                                            onClick={handleSaveProfile}>
+                                        Save
                                     </Button>
-                                </Link>
-                                <Button className={classes.button} size="large" variant="contained" color="primary"
-                                        onClick={handleSaveProfile}>
-                                    Save
-                                </Button>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Paper>

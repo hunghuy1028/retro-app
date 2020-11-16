@@ -3,7 +3,6 @@ import React from "react";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import Board from "../boards/main";
 import NotFoundPage from "./notFoundPage";
-import MyAppBar from "./header";
 import Login from "../User/NotLogin/login"
 import SignUp from "../User/NotLogin/signUp";
 import HomePage from "./homepage";

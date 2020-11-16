@@ -10,11 +10,11 @@ export async function loginService(username, password){
         })
         if (res.data.accessToken) {
             localStorage.setItem("user", JSON.stringify(res.data));
-            console.log("Yes")
         }
         return res.data;
     }catch (e) {
         console.log(e);
+        return {err: "Error"};
     }
 
 }

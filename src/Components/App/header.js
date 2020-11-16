@@ -14,6 +14,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import {logoutService} from "../User/service/authService";
 import callAPI from "../../util/callAPI";
+import logo from "./resource/retro.png"
 
 const StyledMenu = withStyles({
     paper: {
@@ -38,7 +39,7 @@ const StyledMenu = withStyles({
 const StyledMenuItem = withStyles((theme) => ({
     root: {
         '&:focus': {
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: "#239478",
             '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
                 color: theme.palette.common.white,
             },
@@ -100,64 +101,59 @@ export default function MyAppBar()
         handleClose();
     }
 
-    if(loginState.isLogin)
-    {
-        return (
-            <div className={classes.root}>
-                <AppBar position="static">
-                    <Toolbar>
-                        <Typography variant="h5" className={classes.title}>
-                            <Link to="/" style={{ textDecoration: 'none', color: "inherit" }}>
-                                Retro
+    const linkTo = () => loginState.isLogin ? "/dashboard" : "/";
+
+    return (
+        <div className={classes.root}>
+            <AppBar position="static"  style={{background: "#2CB895"}}>
+                <Toolbar>
+                    <img style={{width: 50, height: 50, marginRight: 20}} src={logo} alt={"logo"}/>
+                    <Typography variant="h5" className={classes.title}>
+                        <Link to={linkTo} style={{ textDecoration: 'none', color: "inherit" }}>
+                            Retro App
+                        </Link>
+                    </Typography>
+                    <div style={{display: loginState.isLogin ? "block" : "none"}}>
+                        <Button
+                            aria-controls="customized-menu"
+                            aria-haspopup="true"
+                            variant="contained"
+                            color="primary"
+                            onClick={handleClick}
+                            style={{textTransform: "none", backgroundColor: "#239478", color: "#fff"}}
+                        >
+                            {loginState.user ? `Hi, ${loginState.user.lastName}` : "Hi"}
+                        </Button>
+                        <StyledMenu
+                            id="customized-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <Link to="/users/profile" style={{ textDecoration: 'none', color: "inherit" }}>
+                                <StyledMenuItem onClick={handleClose}>
+                                    <ListItemIcon>
+                                        <AccountCircleIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Profile" />
+                                </StyledMenuItem>
                             </Link>
-                        </Typography>
-                        <div style={{display: loginState.isLogin ? "block" : "none"}}>
-                            <Button
-                                aria-controls="customized-menu"
-                                aria-haspopup="true"
-                                variant="contained"
-                                color="primary"
-                                onClick={handleClick}
-                            >
-                                {loginState.user ? `Hi, ${loginState.user.lastName}` : "Hi"}
-                            </Button>
-                            <StyledMenu
-                                id="customized-menu"
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                {/*<StyledMenuItem onClick={handleClose}>*/}
-                                {/*    <Typography>{loginState.user.username}</Typography>*/}
-                                {/*</StyledMenuItem>*/}
-                                <Link to="/users/profile" style={{ textDecoration: 'none', color: "inherit" }}>
-                                    <StyledMenuItem onClick={handleClose}>
-                                        <ListItemIcon>
-                                            <AccountCircleIcon fontSize="small" />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Profile" />
-                                    </StyledMenuItem>
-                                </Link>
-                                <Link to="/login" style={{ textDecoration: 'none', color: "inherit" }}>
-                                    <StyledMenuItem onClick={handleLogout}>
-                                        <ListItemIcon>
-                                            <ExitToAppIcon fontSize="small" />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Logout" />
-                                    </StyledMenuItem>
-                                </Link>
+                            <Link to="/login" style={{ textDecoration: 'none', color: "inherit" }}>
+                                <StyledMenuItem onClick={handleLogout}>
+                                    <ListItemIcon>
+                                        <ExitToAppIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Logout" />
+                                </StyledMenuItem>
+                            </Link>
 
-                            </StyledMenu>
-                        </div>
+                        </StyledMenu>
+                    </div>
 
-                    </Toolbar>
-                </AppBar>
-            </div>
-        );
-    }
-    else {
-        return (<React.Fragment/>)
-    }
+                </Toolbar>
+            </AppBar>
+        </div>
+    );
 
 }

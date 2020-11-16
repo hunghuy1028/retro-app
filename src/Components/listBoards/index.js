@@ -3,7 +3,7 @@ import {Typography, Divider, Button, CardContent, CardActionArea, Card, Snackbar
 import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import {makeStyles} from "@material-ui/core/styles";
-import AddIcon from '@material-ui/icons/Add';
+import AddRoundedIcon from '@material-ui/icons/AddRounded';
 import Grid from "@material-ui/core/Grid";
 import {Redirect, Link} from "react-router-dom";
 import NewBoard from "./newBoard";
@@ -12,6 +12,10 @@ import MyConfirmDialog from "./MyConfirmDialog";
 import {deleteBoardService} from "./service";
 import MyAppBar from "../App/header";
 import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
+import InputBase from "@material-ui/core/InputBase";
+
+const host = window.location.protocol + "//" + window.location.hostname +
+    (window.location.port? ":"+window.location.port:"");
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,10 +23,14 @@ const useStyles = makeStyles((theme) => ({
         padding: "20px",
     },
     icon:{
-        fontSize: "50px",
+        fontSize: "60px",
+        color: "#239478"
+    },
+    button:{
+        fontSize: 14,
+        textTransform: 'none',
+        color: "#239478"
     }
-
-
 }));
 
 
@@ -61,7 +69,9 @@ function ListBoard()
 
     const countTask = (index) =>
     {
-        return listBoards[index].actionItems.length + listBoards[index].wentWell.length + listBoards[index].toImprove.length;
+        return listBoards[index].actionItems.length +
+            listBoards[index].wentWell.length +
+            listBoards[index].toImprove.length;
     }
 
     const createNewBoard = () => {
@@ -112,7 +122,7 @@ function ListBoard()
             <MyAppBar/>
             <div className={classes.root}>
                 <div>
-                    <Typography variant="h4" display="inline" >
+                    <Typography variant="h4" display="inline" style={{color: "#239478"}}>
                         My boards {'\u00A0'}
                     </Typography>
                     <Typography display="inline"
@@ -123,15 +133,19 @@ function ListBoard()
                 </div>
                 <NewBoard open = {isNewBoardOpen} handleAddBoard = {handleAddBoard} handleClose = {handleClose}/>
                 <Grid container spacing={2} style={{marginTop: "20px"}}>
-                    <Grid item xs={4} sm={2}>
+                    <Grid item xs={6} sm={2}>
                         <Card onClick={createNewBoard} elevation={4} >
                             <CardActionArea>
                                 <CardContent>
-                                    <Grid container alignItems={"center"} justify={"center"}>
-                                        <AddIcon className={classes.icon}/>
-                                        <Typography>
-                                            Add board
-                                        </Typography>
+                                    <Grid container>
+                                        <Grid container item xs={12} alignContent={"center"} justify={"center"}>
+                                            <AddRoundedIcon className={classes.icon}  />
+                                        </Grid>
+                                        <Grid container item xs={12} alignContent={"center"} justify={"center"}>
+                                            <Typography>
+                                                ADD BOARD
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                 </CardContent>
                             </CardActionArea>
@@ -141,15 +155,22 @@ function ListBoard()
                         listBoards.map((item, index) => {
                             const navigateLink = "/boards?id=" + item._id;
                             return(
-                                <Grid item xs={4} sm={2} key = {index}>
+                                <Grid item xs={6} sm={2} key = {index}>
                                     <Card elevation={3}>
                                         <Link to = {navigateLink}
                                               style={{ textDecoration: 'none', color: "inherit" }}>
                                             <CardActionArea>
                                                 <CardContent>
-                                                    <Typography variant="h6">
-                                                        {item.nameBoard}
-                                                    </Typography>
+                                                    <InputBase defaultValue={item.nameBoard}
+                                                               multiline
+                                                               disabled
+                                                               inputProps={{
+                                                                   style:{
+                                                                       fontSize: 20,
+                                                                       color: "#239478",
+                                                                   }
+                                                               }}
+                                                    />
                                                     <Typography display="inline"
                                                                 style={{fontSize: 14, color: "#b6b6b6"}}>
                                                         {countTask(index) > 0 ? countTask(index) + " cards" : ""}
@@ -161,17 +182,19 @@ function ListBoard()
                                         <Divider/>
                                         <Grid container item justify="center" alignItems={"center"}>
                                             <Grid item xs={6}>
-                                                <CopyToClipboard text = {navigateLink}
+                                                <CopyToClipboard text = {host+navigateLink}
                                                                  onCopy = {() => setIsOpenSnackBar(true)}>
-                                                    <Button fullWidth size={"small"}>
-                                                        <FileCopyIcon fontSize={"inherit"} style={{fontSize: "24px"}}/>
+                                                    <Button fullWidth size={"small"}
+                                                            className={classes.button}>
+                                                        <FileCopyIcon fontSize={"inherit"} style={{fontSize: "20px"}}/>
                                                         URL
                                                     </Button>
                                                 </CopyToClipboard>
                                             </Grid>
                                             <Grid item xs={6}>
-                                                <Button fullWidth size={"small"} onClick={() => handleDeleteBoardOpen(index)}>
-                                                    <DeleteIcon fontSize={"inherit"} style={{fontSize: "24px"}}/>
+                                                <Button fullWidth className={classes.button}
+                                                        size={"small"} onClick={() => handleDeleteBoardOpen(index)}>
+                                                    <DeleteIcon fontSize={"inherit"} style={{fontSize: "20px"}}/>
                                                     Delete
                                                 </Button>
                                             </Grid>

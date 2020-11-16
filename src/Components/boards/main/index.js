@@ -6,6 +6,7 @@ import BoardColumns from "../boardColumns";
 import NameBoard from "./nameBoard";
 import callAPI from "../../../util/callAPI";
 import MyAppBar from "../../App/header";
+import NotFoundPage from "../../App/notFoundPage";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,19 +38,27 @@ function Board({match})
         toImprove: [],
         actionItems: []
     });
+    const [isExistBoard, setIsExistBoard] = useState(false)
     const classes = useStyles();
 
     const navigatorLink = "boards/board" + match.location.search;
     useEffect(() => {
         const fetchData = async () =>
         {
-            const res = await callAPI('POST', navigatorLink, null);
+            const res = await callAPI('GET', navigatorLink, null);
             const result = res.data;
-            setBoard(result);
+            if(result)
+            {
+                setBoard(result);
+                setIsExistBoard(true)
+            }
+            else {
+                setIsExistBoard(false);
+            }
             setIsLoaded(true);
         }
         fetchData();
-    }, [navigatorLink])
+    }, [isExistBoard, navigatorLink])
 
     const wentWell = {
         id: board._id,
@@ -118,7 +127,7 @@ function Board({match})
                 </div>
             </React.Fragment>
         )
-    } else {
+    } else if(isExistBoard){
         return (
             <React.Fragment>
                 <MyAppBar/>
@@ -143,6 +152,9 @@ function Board({match})
                 </div>
             </React.Fragment>
         );
+    }else
+    {
+        return(<NotFoundPage/>)
     }
 }
 

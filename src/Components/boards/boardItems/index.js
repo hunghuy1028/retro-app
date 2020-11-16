@@ -1,6 +1,5 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {IconButton} from "@material-ui/core";
@@ -73,7 +72,7 @@ export default function boardItems({onRemoveItem, tasks, color, editValue, onEdi
                     <InputBase defaultValue={task}
                                fullWidth
                                multiline
-                               disabled
+                               readOnly
                                style={{color: "#ffffff"}}
                     />
                     <Grid container item justify="flex-end" alignItems="flex-end">
