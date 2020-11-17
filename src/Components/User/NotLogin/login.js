@@ -214,7 +214,7 @@ export default function SignIn({location}) {
                         <Grid container justify="space-between" alignContent="center">
                             <Grid item xs={12} sm={6}>
                                 <GoogleLogin
-                                    clientId="682680851043-jnjniaiqn8c24qmebuirop966ki5pcdv.apps.googleusercontent.com"
+                                    clientId="682680851043-22m1a87uc6lp6ab7cj4f6bcesp07noo5.apps.googleusercontent.com"
                                     buttonText="Login with Google"
                                     onSuccess={responseGoogle}
                                     onFailure={responseGoogle}
@@ -223,7 +223,7 @@ export default function SignIn({location}) {
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <FacebookLogin
-                                    appId="1154216414976008"
+                                    appId="369890444269182"
                                     autoLoad={false}
                                     callback={responseFacebook}
                                     render={renderProps => (
