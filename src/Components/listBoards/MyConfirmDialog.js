@@ -35,10 +35,10 @@ export default function MyConfirmDialog({open, close, confirm}) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={close} color="primary">
-                        Disagree
+                        Cancel
                     </Button>
                     <Button onClick={confirm} color="primary">
-                        Agree
+                        OK
                     </Button>
                 </DialogActions>
             </Dialog>

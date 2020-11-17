@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ClipLoader from "react-spinners/ClipLoader";
+import { css } from "@emotion/core";
 import BoardColumns from "../boardColumns";
 import NameBoard from "./nameBoard";
 import callAPI from "../../../util/callAPI";
@@ -22,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const override = `
+const override = css`
   display: block;
   margin: 0 auto;
-  border-color: red;
+  border-color: blue;
 `;
 
 function Board({match})
@@ -120,7 +121,7 @@ function Board({match})
                 <MyAppBar/>
                 <div className="sweet-loading">
                     <ClipLoader
-                        override = {override}
+                        css = {override}
                         size={50}
                         loading={!isLoaded}
                     />

@@ -6,7 +6,6 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import MyAppBar from "./header";
 import {Grid} from "@material-ui/core";
-// import picture from "./resource/9814.jpg"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,10 +43,10 @@ export default function HomePage()
     return(
         <React.Fragment>
             <MyAppBar/>
-            <div className={classes.root} >
-                <Container component="main" className={classes.main}>
+            <div className={classes.root}  style={{backgroundColor: "#fff"}}>
+                <Container component="main" className={classes.main} >
                     <Grid container  justify="center" alignContent="center">
-                        <Grid container direction="column">
+                        <Grid container item direction="column">
                             <Grid container item style={{marginBottom: 20}}>
                                 <Typography variant="h3" component="h1" gutterBottom style={{fontWeight: "bold"}}>
                                     Welcome to Retro App
@@ -79,7 +78,6 @@ export default function HomePage()
                             </Grid>
                         </Grid>
                     </Grid>
-
 
                 </Container>
             </div>

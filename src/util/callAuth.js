@@ -1,5 +1,5 @@
 import axios from "axios"
-const URL = "http://localhost:3000/auth/";
+const URL = "https://retro-api-1712472.herokuapp.com/";
 
 const callAuth = () => {
     const token = JSON.parse(localStorage.getItem('user'));

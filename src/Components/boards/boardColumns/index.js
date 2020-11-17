@@ -83,14 +83,10 @@ function BoardColumns({tasks, color, onAddingNewItem, onRemoveItem, onEditItem})
                         <Grid container justify="space-between" alignItems="center">
                             <Grid item>
                                 <Grid container spacing={1} style={{paddingTop: 2}}>
-                                    <Grid item>
-                                        <StopIcon style={{color: color}}/>
-                                    </Grid>
-                                    <Grid item>
-                                        <Box fontWeight="fontWeightBold">
-                                            {tasks.name}
-                                        </Box>
-                                    </Grid>
+                                    <StopIcon style={{color: color}}/>
+                                    <Box fontWeight="fontWeightBold" style={{marginLeft: 10}}>
+                                        {tasks.name}
+                                    </Box>
                                 </Grid>
                             </Grid>
                             <Grid item>

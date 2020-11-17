@@ -11,8 +11,6 @@ import passwordChange from "../User/Logged/passwordChange";
 
 export default function App()
 {
-
-
     return(
         <React.Fragment>
             <Router>
@@ -26,7 +24,6 @@ export default function App()
                     <Route path="/signup" component={SignUp}/>
                     <Route component={NotFoundPage}/>
                 </Switch>
-
             </Router>
         </React.Fragment>
     )
