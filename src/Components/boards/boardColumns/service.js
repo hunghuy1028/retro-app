@@ -9,6 +9,5 @@ export const editItemBoardService = async (id, name, index, value) =>
         index: index,
         newValue: value
     })
-
     return res === 1;
 }
