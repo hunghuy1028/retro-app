@@ -10,7 +10,6 @@ import {Grid} from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-
     },
     main: {
         marginTop: theme.spacing(6),

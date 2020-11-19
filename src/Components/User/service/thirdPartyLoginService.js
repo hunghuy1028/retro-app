@@ -14,7 +14,7 @@ export const GoogleLoginService = async (token) =>
         return res.data;
     }catch(e)
     {
-        console(e);
+        console.log(e);
         return {err: "Error"};
     }
 }
@@ -34,7 +34,7 @@ export const FacebookLoginService = async (token, userID) =>
         return res.data;
     }catch(e)
     {
-        console(e);
+        console.log(e);
         return {err: "Error"};
     }
 }

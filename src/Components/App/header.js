@@ -47,7 +47,6 @@ const StyledMenuItem = withStyles((theme) => ({
     },
 }))(MenuItem);
 
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
